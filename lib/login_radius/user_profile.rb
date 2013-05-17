@@ -30,8 +30,7 @@ module LoginRadius
     #
     # @return [Boolean] True/False whether login successful or not.
     def login
-      login_url = API_ROOT + "userprofile.ashx?token=#{token}&apisecrete=#{secret}"
-      response = call_api(login_url)
+      response = call_api("userprofile.ashx", {:token => token, :apisecrete => secret})
       unless response[:id].blank?   
         this.user_profile_hash = response
         return true
@@ -39,20 +38,26 @@ module LoginRadius
       return false
     end
 
-    # Generic call function that other submodules can use to hit the API.
+    # Generic GET call function that other submodules can use to hit the API.
     #
     # @param url [String] Target URL to fetch data from.
+    # @param params [Hash] Parameters to send
     # @return data [Hash] Parsed JSON data from the call
-    def call_api(url)
+    def call_api(url, params = {})
       url = API_ROOT+url
+      
       if async
         #if async is true, we expect you to be using EM::Synchrony submodule and to be in an eventloop,
         #like with a thin server using the Cramp framework. Otherwise, this method blows up.
-        result = EM::Synchrony.sync EventMachine::HttpRequest.new(url).aget
-        # and continue on.. 
+        response = EM::Synchrony.sync EventMachine::HttpRequest.new(url).aget :query => params
+        response = response.body        
       else
-
+        #synchronous version of the call.
+        url_obj = URI.parse(url)
+        response = JSON.parse(Net::HTTP.get(url_obj, params).body)
       end
+      
+      return JSON.parse(response)
     end
 
     def method_missing(method, *arguments, &block)
