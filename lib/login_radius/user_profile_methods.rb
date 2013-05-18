@@ -9,7 +9,7 @@ module LoginRadius
     # @param method [Symbol] Method's name
     # @param route [String] Route, ex. is "/users/:token/:secret" (:something is interpolated to be self.something)
     # @param params [Hash] Hash of params you wish to send to the route. If you use symbols for values, are interpolated.
-    # @param key_success_check [Symbol] Key to check for in the response to see if it was successful. Ex, :id for login
+    # @param key_success_check [Symbol] Key to check for in the response to see if it was successful. Ex, :id for login, if not set, whole response hash is returned instead of true/false
     # @return [Boolean] Whether or not it was successful.
     [
       {
@@ -21,23 +21,21 @@ module LoginRadius
       {
         :method => :mentions,
         :route => "status/mentions/:secret/:token",
-        :params => {},
-        :key_success_check => 0 #first timeline entry
+        :params => {}
       },
       {
         :method => :company,
         :route => "GetCompany/:secret/:token",
-        :params => {},
-        :key_success_check => 0 #first timeline entry
+        :params => {}
       },
       {
         :method => :contacts,
         :route => "contacts/:secret/:token",
-        :params => {},
-        :key_success_check => 0 #first timeline entry
+        :params => {}
       }
     ].each do |method_info|
       define_method(method_info[:method]) do
+        
         #when params have symbols as values, means we actually want fields on the object,
         #so we dynamically generate real params.
         real_params = method_info[:params].inject(Hash.new) do |hash, entry|
@@ -46,12 +44,10 @@ module LoginRadius
         end
 
         #allows interpolation of routes - so /blah/:token becomes /blah/2323-233d3e etc.
-        pp method_info[:route]
         real_route = method_info[:route].gsub(/\/:(\w+)/) do |match|
           key = match.split(":").last
           "/"+self.send(key).to_s
         end
-        pp real_route
         response = call_api(real_route, real_params)
 
         if response.is_a?(Hash)
@@ -70,7 +66,9 @@ module LoginRadius
           end
         end
 
-        return response[method_info[:key_success_check]].blank?
+        #If the user wants to check for a particular key in the response hash to determine
+        #whether or not call is successful, we use it. If they don't, then we return the response hash.
+        return method_info[:key_success_check] ? response[method_info[:key_success_check]].blank? : response
       end
     end
   end
