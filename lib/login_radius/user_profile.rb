@@ -1,6 +1,7 @@
 module LoginRadius
   class UserProfile
-    include UserProfileMethods
+    include UserProfileGetters
+    include Messages
     
     attr_accessor :secret, :token, :async
     

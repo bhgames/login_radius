@@ -24,22 +24,17 @@ class UserProfileTest < BaseTest
   end
   
   test "mentions" do
-    @user_profile.login
-    binding.pry
-    
-    @user_profile.mentions
+    @user_profile.login    
+    assert(@user_profile.mentions.is_a?(Array))
   end
   
-  test "company" do
+  test "companies" do
     @user_profile.login
-    @user_profile.company
-    binding.pry
+    assert(@user_profile.companies.is_a?(Array))
   end
   
   test "contacts" do
     @user_profile.login
-    @user_profile.contacts
-    binding.pry
+    assert(@user_profile.contacts.is_a?(Array))
   end
-  
 end

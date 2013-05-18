@@ -24,7 +24,12 @@ module LoginRadius
         :params => {}
       },
       {
-        :method => :company,
+        :method => :timeline,
+        :route => "status/timeline/:secret/:token",
+        :params => {}
+      },
+      {
+        :method => :companies,
         :route => "GetCompany/:secret/:token",
         :params => {}
       },
