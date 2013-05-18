@@ -81,12 +81,9 @@ module LoginRadius
       
       unconverted_response_hash = JSON.parse(response.body)
       #it's all String keys in CamelCase above, so...
-      
-      converted_response_hash = unconverted_response_hash.inject(Hash.new) do |hash, entry|
-        hash[entry.first.underscore.to_sym] = entry.last
-        hash
-      end #trick to convert hash of string keys into hash of snake case symbols
+      converted_response_hash = Hash.lr_convert_hash_keys(unconverted_response_hash).symbolize_keys!
       
       return converted_response_hash
     end
+  end
 end
