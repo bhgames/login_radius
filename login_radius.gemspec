@@ -15,7 +15,7 @@ Gem::Specification.new do |gem|
   gem.require_paths = ["lib"]
   gem.version       = LoginRadius::VERSION
 
-  gem.add_dependency 'test-unit'
 	gem.add_dependency 'em-http-request'
 	gem.add_dependency 'em-synchrony'
+	
 end

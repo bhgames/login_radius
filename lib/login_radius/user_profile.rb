@@ -1,6 +1,6 @@
 module LoginRadius
   class UserProfile
-    attr_accessible :user_profile_hash, :secret, :token, :async
+    attr_accessor :user_profile_hash, :secret, :token, :async
     API_ROOT = "https://hub.loginradius.com/"
 
     # Takes a hash of account secret, token, and connection type(net_http or em_http)
@@ -30,12 +30,17 @@ module LoginRadius
     #
     # @return [Boolean] True/False whether login successful or not.
     def login
-      response = call_api("userprofile.ashx", {:token => token, :apisecrete => secret})
-      unless response[:id].blank?   
-        this.user_profile_hash = response
-        return true
+      self.user_profile_hash = call_api("userprofile.ashx", {:token => token, :apisecrete => secret})
+      
+      #define methods for each key in the hash, so they are accessible:
+      #(I dont like using method missing returns because then respond_to? doesn't work)
+      user_profile_hash.each do |key, value|
+        define_singleton_method(key) do 
+          return value
+        end
       end
-      return false
+      
+      return user_profile_hash[:id].blank?
     end
 
     # Generic GET call function that other submodules can use to hit the API.
@@ -44,9 +49,11 @@ module LoginRadius
     # @param params [Hash] Parameters to send
     # @return data [Hash] Parsed JSON data from the call
     def call_api(url, params = {})
-      url = API_ROOT+url
+      url = API_ROOT+url unless url.match(/^#{API_ROOT}/) #in case api root is included,
+      #as would happen in a recursive redirect call.
       
       if async
+        #TODO: Test async!
         #if async is true, we expect you to be using EM::Synchrony submodule and to be in an eventloop,
         #like with a thin server using the Cramp framework. Otherwise, this method blows up.
         response = EM::Synchrony.sync EventMachine::HttpRequest.new(url).aget :query => params
@@ -54,20 +61,32 @@ module LoginRadius
       else
         #synchronous version of the call.
         url_obj = URI.parse(url)
-        response = JSON.parse(Net::HTTP.get(url_obj, params).body)
+        url_obj.query = URI.encode_www_form(params)
+      
+        http = Net::HTTP.new(url_obj.host, url_obj.port)
+        http.use_ssl = true
+        http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+        response = http.get(url_obj.request_uri)
+        
+        if response.is_a?(Net::HTTPTemporaryRedirect)
+          #for some reason, we always get redirected when calling server first time.
+          #so if we do, we scan body for the redirect url, and the scan returns
+          #an array of arrays. So we grab the array we know has what we need,
+          #and grab the first element.
+          redirect_url_array = response.body.scan(/<a href=\"([^>]+)\">/i)[1]
+          redirect_url = redirect_url_array.first
+          return call_api(redirect_url, params) 
+        end
       end
       
-      return JSON.parse(response)
+      unconverted_response_hash = JSON.parse(response.body)
+      #it's all String keys in CamelCase above, so...
+      
+      converted_response_hash = unconverted_response_hash.inject(Hash.new) do |hash, entry|
+        hash[entry.first.underscore.to_sym] = entry.last
+        hash
+      end #trick to convert hash of string keys into hash of snake case symbols
+      
+      return converted_response_hash
     end
-
-    def method_missing(method, *arguments, &block)
-     
-      if(user_profile_hash[method.to_sym])
-        raise LoginRadius::Exception.new("Too many arguments! 0 only!") if arguments.size>0
-        return user_profile_hash([method.to_sym])
-      end
-
-      super
-    end
-  end
 end
