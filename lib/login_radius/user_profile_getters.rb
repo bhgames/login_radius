@@ -1,7 +1,7 @@
 #Include this module in UserProfile, and UserProfile will magically have all the methods
 #I dynamically generate below!
 module LoginRadius
-  module UserProfileMethods
+  module UserProfileGetters
     # Below is metaprogramming. This is what Ruby is magic for.
     # Since most API calls are similar, I define an interface for them.
     # You add a hash with these keys below, and it makes a method for them on loadup:

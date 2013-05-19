@@ -73,11 +73,15 @@ module LoginRadius
         end
       end
       
-      unconverted_response_hash = JSON.parse(response.body)
+      unconverted_response = JSON.parse(response.body)
       #it's all String keys in CamelCase above, so...
-      converted_response_hash = Hash.lr_convert_hash_keys(unconverted_response_hash).symbolize_keys!
+      # IF we got a hash back, convert it directly, if its an array, convert each item which is a hash
+      # into snake case
+      converted_response = unconverted_response.is_a?(Hash) ?
+                            Hash.lr_convert_hash_keys(unconverted_response).symbolize_keys! : 
+                            unconverted_response.map { |item| Hash.lr_convert_hash_keys(item).symbolize_keys! }
       
-      return converted_response_hash
+      return converted_response
     end
   end
 end

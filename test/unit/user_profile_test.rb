@@ -1,6 +1,6 @@
 require_relative 'base_test.rb'
 class UserProfileTest < BaseTest
-  TOKEN = "df1b8419-5adb-48cd-940c-01707f0289ad"
+  TOKEN = "2f801222-adf5-4a07-98aa-8caacc3da3cf"
   SECRET = "1337670d-f7fd-4066-a2e3-e440aec071ee"
   
   def setup
@@ -26,6 +26,11 @@ class UserProfileTest < BaseTest
   test "mentions" do
     @user_profile.login    
     assert(@user_profile.mentions.is_a?(Array))
+  end
+  
+  test "timeline" do
+    @user_profile.login    
+    assert(@user_profile.timeline.is_a?(Array))
   end
   
   test "companies" do
