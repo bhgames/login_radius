@@ -4,9 +4,9 @@ require File.expand_path('../lib/login_radius/version', __FILE__)
 Gem::Specification.new do |gem|
   gem.authors       = ["Jordan Prince"]
   gem.email         = ["jordanmprince@gmail.com"]
-  gem.description   = %q{TODO: Write a gem description}
-  gem.summary       = %q{TODO: Write a gem summary}
-  gem.homepage      = ""
+  gem.description   = %q{Ruby wrapper for LoginRadius API}
+  gem.summary       = %q{Is a ruby wrapper for LoginRadius API}
+  gem.homepage      = "http://www.loginradius.com"
 
   gem.files         = `git ls-files`.split($\)
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
