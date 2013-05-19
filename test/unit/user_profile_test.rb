@@ -1,6 +1,6 @@
 require_relative 'base_test.rb'
 class UserProfileTest < BaseTest
-  TOKEN = "2f801222-adf5-4a07-98aa-8caacc3da3cf"
+  TOKEN = "90986ecd-3ee9-4c81-9dec-eb1673fc3cb0"
   SECRET = "1337670d-f7fd-4066-a2e3-e440aec071ee"
   
   def setup
@@ -34,9 +34,15 @@ class UserProfileTest < BaseTest
     assert(@user_profile.contacts.is_a?(Array))
   end
   
-  test "groups" do
-    binding.pry
-    
+  test "groups" do    
     assert(@user_profile.facebook_groups.is_a?(Array))
+  end
+  
+  test "posts" do    
+    assert(@user_profile.facebook_posts.is_a?(Array))
+  end
+  
+  test "events" do    
+    assert(@user_profile.facebook_events.is_a?(Array))
   end
 end

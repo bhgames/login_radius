@@ -44,6 +44,16 @@ module LoginRadius
         :method => :facebook_groups,
         :route => "GetGroups/:secret/:token",
         :params => {}
+      },
+      {
+        :method => :facebook_posts,
+        :route => "GetPosts/:secret/:token",
+        :params => {}
+      },
+      {
+        :method => :facebook_events,
+        :route => "GetEvents/:secret/:token",
+        :params => {}
       }
     ].each do |method_info|
       define_method(method_info[:method].to_s + "!") do
