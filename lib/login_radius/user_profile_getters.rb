@@ -4,7 +4,9 @@ module LoginRadius
   module UserProfileGetters
     # Below is metaprogramming. This is what Ruby is magic for.
     # Since most API calls are similar, I define an interface for them.
-    # You add a hash with these keys below, and it makes a method for them on loadup:
+    # You add a hash with these keys below, and it makes a method for them on loadup.
+    # It creates both a ! version of the method, which throws errors if you don't have access
+    # To an API endpoint, and a safe one without a ! symbol(login! vs login) that just returns false.
     # 
     # @param method [Symbol] Method's name
     # @param route [String] Route, ex. is "/users/:token/:secret" (:something is interpolated to be self.something)
@@ -19,17 +21,17 @@ module LoginRadius
         :key_success_check => :id
       },
       {
-        :method => :mentions,
+        :method => :twitter_mentions,
         :route => "status/mentions/:secret/:token",
         :params => {}
       },
       {
-        :method => :timeline,
+        :method => :twitter_timeline,
         :route => "status/timeline/:secret/:token",
         :params => {}
       },
       {
-        :method => :companies,
+        :method => :linked_in_companies,
         :route => "GetCompany/:secret/:token",
         :params => {}
       },
@@ -37,9 +39,14 @@ module LoginRadius
         :method => :contacts,
         :route => "contacts/:secret/:token",
         :params => {}
+      },
+      {
+        :method => :facebook_groups,
+        :route => "GetGroups/:secret/:token",
+        :params => {}
       }
     ].each do |method_info|
-      define_method(method_info[:method]) do
+      define_method(method_info[:method].to_s + "!") do
         
         #when params have symbols as values, means we actually want fields on the object,
         #so we dynamically generate real params.
@@ -71,9 +78,18 @@ module LoginRadius
           end
         end
 
-        #If the user wants to check for a particular key in the response hash to determine
-        #whether or not call is successful, we use it. If they don't, then we return the response hash.
-        return method_info[:key_success_check] ? response[method_info[:key_success_check]].blank? : response
+        #raise an error if there is one, otherwise, return.
+        raise LoginRadius::Exception.new(response[:errormessage]) if (response.is_a?(Hash) and response[:errorcode])
+        return response
+      end
+      
+      #safe version of the method that doesn't throw an exception
+      define_method(method_info[:method]) do
+        begin
+          self.send(method_info[:method].to_s+"!")
+        rescue LoginRadius::Exception
+          return false
+        end
       end
     end
   end
