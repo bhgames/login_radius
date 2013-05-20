@@ -3,7 +3,6 @@ source 'https://rubygems.org'
 # Specify your gem's dependencies in login_radius.gemspec
 gemspec
 
-
 group :test do
   gem 'activerecord', "~> 3.2.12", :require => "active_record"
   gem 'activesupport'

@@ -1,0 +1,513 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>
+  File: README
+  
+    &mdash; Documentation by YARD 0.8.6.1
+  
+</title>
+
+  <link rel="stylesheet" href="css/style.css" type="text/css" charset="utf-8" />
+
+  <link rel="stylesheet" href="css/common.css" type="text/css" charset="utf-8" />
+
+<script type="text/javascript" charset="utf-8">
+  hasFrames = window.top.frames.main ? true : false;
+  relpath = '';
+  framesUrl = "frames.html#!" + escape(window.location.href);
+</script>
+
+
+  <script type="text/javascript" charset="utf-8" src="js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="js/app.js"></script>
+
+
+  </head>
+  <body>
+    <div id="header">
+      <div id="menu">
+  
+    <a href="_index.html">Index</a> &raquo; 
+    <span class="title">File: README</span>
+  
+
+  <div class="noframes"><span class="title">(</span><a href="." target="_top">no frames</a><span class="title">)</span></div>
+</div>
+
+      <div id="search">
+  
+    <a class="full_list_link" id="class_list_link"
+        href="class_list.html">
+      Class List
+    </a>
+  
+    <a class="full_list_link" id="method_list_link"
+        href="method_list.html">
+      Method List
+    </a>
+  
+    <a class="full_list_link" id="file_list_link"
+        href="file_list.html">
+      File List
+    </a>
+  
+</div>
+      <div class="clear"></div>
+    </div>
+
+    <iframe id="search_frame"></iframe>
+
+    <div id="content"><div id='filecontents'><h1>LoginRadius</h1>
+
+<p>Ruby wrapper for the LoginRadius API. Get social graph information and send messages using LoginRadius&#39;
+many social network clients!</p>
+
+<p>Optional Asynchronous EventMachine friendly option!</p>
+
+<h2>Installation</h2>
+
+<p>Add this line to your application&#39;s Gemfile:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_gem'>gem</span> <span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>login_radius</span><span class='tstring_end'>'</span></span>
+</code></pre>
+
+<p>And then execute:</p>
+
+<pre class="code ruby"><code class="ruby">$ bundle
+</code></pre>
+
+<p>Or install it yourself as:</p>
+
+<pre class="code ruby"><code class="ruby">$ gem install login_radius
+</code></pre>
+
+<h2>Usage</h2>
+
+<p>Take a peek:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='ivar'>@user_profile</span> <span class='op'>=</span> <span class='const'>LoginRadius</span><span class='op'>::</span><span class='const'>UserProfile</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='lbrace'>{</span>
+  <span class='symbol'>:token</span> <span class='op'>=&gt;</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>TOKEN</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span>
+  <span class='symbol'>:secret</span> <span class='op'>=&gt;</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>SECRET</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span>
+  <span class='symbol'>:async</span> <span class='op'>=&gt;</span> <span class='kw'>false</span> <span class='comment'>#Set to true if using EventMachine driven frameworks(must use Em Synchrony)
+</span><span class='rbrace'>}</span><span class='rparen'>)</span>
+<span class='ivar'>@user_profile</span><span class='period'>.</span><span class='id identifier rubyid_login'>login</span>
+<span class='id identifier rubyid_my_contacts'>my_contacts</span> <span class='op'>=</span> <span class='ivar'>@user_profile</span><span class='period'>.</span><span class='id identifier rubyid_contacts'>contacts</span>
+</code></pre>
+
+<p>That&#39;s right, folks. It&#39;s that simple. In order to get access to LoginRadius API, you only
+need to create a UserProfile object with a user&#39;s login token and your apps secret, and login.</p>
+
+<h3>How to get a token and actually make a client</h3>
+
+<p>On the LoginRadius website, you are able to enter your own callback URL for your app. You will need
+to setup a route on whatever framework you use, maybe &quot;/callback.&quot; Then, get the gem forward(<a href="http://www.forwardhq.com">www.forwardhq.com</a>)
+and use it to set up a public web address for your localhost server. Then, you can enter the callback on LoginRadius
+as <a href="https://jordanmatthew.fwd.wf/callback">https://jordanmatthew.fwd.wf/callback</a>, for instance.</p>
+
+<p>Paste their example login stuff onto your index page, and then enter your FB/Twitter credentials on their site.</p>
+
+<p>Now you&#39;re ready to go with testing!</p>
+
+<p>When LoginRadius hits your callback after a user logs in, you&#39;ll see parameters like this:</p>
+
+<p>Parameters: &quot;token&quot;=&gt;&quot;a0ba24d5-2290-43f8-a2f8-575848c9f0e8&quot;</p>
+
+<p>This token is the token used in the above example. This is what you&#39;ll need to get your user&#39;s profile.
+Just paste it into the code above, and you can immediately grab their user profile on the callback,
+login, and grab their contacts.</p>
+
+<h3>Some examples</h3>
+
+<p>Below is just code exemplifying some of the more interesting methods and what they return.
+Note if you have a user authed via facebook, and not twitter, methods like </p>
+
+<pre class="code ruby"><code class="ruby">@user_profile.twitter_timeline
+=&gt; false
+</code></pre>
+
+<p>Will return false, indicating you don&#39;t have access to that stream.</p>
+
+<h4>Facebook Stuff</h4>
+
+<pre class="code ruby"><code class="ruby">@user_profile.facebook_groups
+=&gt; [{:id=&gt;&quot;150473181768667&quot;, :name=&gt;&quot;Blood Eagles&quot;},
+ {:id=&gt;&quot;2200024005&quot;, :name=&gt;&quot;Alpha Tau Omega: Delta Chapter&quot;},
+ {:id=&gt;&quot;362409953784029&quot;, :name=&gt;&quot;Hickory Point EMT-B Class&quot;},
+ {:id=&gt;&quot;281691781904237&quot;, :name=&gt;&quot;MCB 251 lab practical study guide&quot;},
+ {:id=&gt;&quot;148034208622530&quot;, :name=&gt;&quot;FAMILY&quot;},
+ {:id=&gt;&quot;204761486233741&quot;, :name=&gt;&quot;GlamourEarrings.com&quot;},
+ {:id=&gt;&quot;206494779373909&quot;, :name=&gt;&quot;JUDO FAMILY!!!&quot;},
+ {:id=&gt;&quot;115112148542081&quot;, :name=&gt;&quot;BattleHard Games, LLC&quot;},
+ {:id=&gt;&quot;22918670824&quot;, :name=&gt;&quot;152 Thursday Meeting Group&quot;}]
+
+@user_profile.facebook_groups
+=&gt; [{:id=&gt;&quot;150473181768667&quot;, :name=&gt;&quot;Blood Eagles&quot;},
+ {:id=&gt;&quot;2200024005&quot;, :name=&gt;&quot;Alpha Tau Omega: Delta Chapter&quot;}]
+
+
+@user_profile.facebook_events
+=&gt; [{:id=&gt;&quot;328804572620&quot;,
+  :name=&gt;&quot;The Only Pi Day of Our Lives&quot;,
+  :start_time=&gt;&quot;3/14/2015 9:00:00 AM&quot;,
+  :rsvp_status=&gt;&quot;attending&quot;,
+  :location=&gt;&quot;Across the world!&quot;}]
+</code></pre>
+
+<p>And, finally, you can also make facebook posts:</p>
+
+<pre class="code ruby"><code class="ruby">params = {
+  :title =&gt; &quot;Testing&quot;,
+  :url =&gt; &quot;www.loginradius.com&quot;,
+  :status =&gt; &quot;Wizzup&quot;,
+  :caption =&gt; &quot;Testly&quot;,
+  :description =&gt; &quot;Testing&quot;
+}
+@user_profile.make_facebook_post(params)
+=&gt; true
+</code></pre>
+
+<p>Note that as of publishing, the :to option on facebook params does not work. You can&#39;t post to
+other people&#39;s walls.</p>
+
+<h4>LinkedIn Stuff</h4>
+
+<p>To send messages over linked in:</p>
+
+<pre class="code ruby"><code class="ruby">@user_profile.send_linked_in_message(@user_profile.contacts.first[:id], &quot;Testing&quot;, &quot;This is a test.&quot;)
+=&gt; true
+</code></pre>
+
+<p>Notice how I grabbed my first contact and used his :id property.</p>
+
+<p>Also, you can grab a user&#39;s linked in companies:</p>
+
+<pre class="code ruby"><code class="ruby">@user_profile.linked_in_companies
+=&gt; [{:id=&gt;314808, :name=&gt;&quot;Login Radius&quot;}]
+</code></pre>
+
+<h4>Twitter Stuff</h4>
+
+<p>To send messages over twitter:</p>
+
+<pre class="code ruby"><code class="ruby">@user_profile.send_linked_in_message(@user_profile.contacts.first[:id], &quot;Testing&quot;, &quot;This is a test.&quot;)
+=&gt; true
+</code></pre>
+
+<p>Notice how I grabbed my first contact and used his :id property.</p>
+
+<p>Grab your timelines and mentions:</p>
+
+<pre class="code ruby"><code class="ruby">@user_profile.twitter_timeline
+=&gt; [{:id=&gt;&quot;336525189544304640&quot;,
+    :text=&gt;
+    &quot;Samsung UE32F5000 – Televisor LED de 32 pulgadas con SmartTV (Full HD 1080p, Clear Motion Rate 100 Hz) color n... http://
+    :date_time=&gt;&quot;5/20/2013 4:53:52 PM&quot;,
+    :likes=&gt;0,
+    :place=&gt;&quot;&quot;,
+    :source=&gt;
+     &quot;&lt;a href=\&quot;http://twitterfeed.com\&quot; rel=\&quot;nofollow\&quot;&gt;twitterfeed&lt;/a&gt;&quot;,
+    :image_url=&gt;nil,
+    :link_url=&gt;nil,
+    :name=&gt;&quot;Computer Deals&quot;}]
+
+@user_profile.twitter_mentions
+=&gt; [{:id=&gt;&quot;318451170697965568&quot;,
+    :text=&gt;
+     &quot;S/O to @Succes_Inside\n@NLWebMedia\nder Magazine\n@tendermagazine\n@sirtiman\n@JordanMPrince\n@frostfire\n@NikiAtHomeRich
+    :date_time=&gt;&quot;3/31/2013 7:54:10 PM&quot;,
+    :likes=&gt;0,
+    :place=&gt;&quot;&quot;,
+    :source=&gt;&quot;web&quot;,
+    :image_url=&gt;nil,
+    :link_url=&gt;nil,
+    :name=&gt;&quot;SheDoGraphics&quot;}]
+</code></pre>
+
+<h4>Social Network Contacts</h4>
+
+<p>Note this is all the contacts from every social network the user is connected to.</p>
+
+<pre class="code ruby"><code class="ruby">@user_profile.contacts
+=&gt; [{:name=&gt;&quot;John Test&quot;,
+  :email_id=&gt;&quot;&quot;,
+  :phone_number=&gt;&quot;&quot;,
+  :id=&gt;&quot;1&quot;,
+  :profile_url=&gt;nil,
+  :image_url=&gt;nil,
+  :status=&gt;nil,
+  :industry=&gt;nil,
+  :country=&gt;nil,
+  :gender=&gt;nil}]
+</code></pre>
+
+<h4>User Profile Stuff</h4>
+
+<p>When you login, the API returns a hash of user profile information, which is then turned into methods
+on the LoginRadius::UserProfile object for your accessing pleasure. A quick call to methods will show this. </p>
+
+<pre class="code ruby"><code class="ruby">@user_profile.methods
+=&gt;[:id,
+ :provider,
+ :prefix,
+ :first_name,
+ :middle_name,
+ :last_name,
+ :suffix,
+ :full_name,
+ :nick_name,
+ :profile_name,
+ :birth_date,
+ :gender,
+ :website,
+ :email,
+ :country,
+ ...]
+</code></pre>
+
+<p>Calling .methods on a user profile right after a successful login call will reveal these. 
+For more information, please read the section in caveats on the matter, as it&#39;s a bit esoteric.</p>
+
+<h2>Caveats</h2>
+
+<p>This section is for the nitpickers. It&#39;s got notes about the finer pickings of this API for those
+who are wondering, but is not strictly necessary reading.</p>
+
+<h3>The Bang Methods</h3>
+
+<p>When authenticated, a method like contacts will return </p>
+
+<pre class="code ruby"><code class="ruby">@user_profile.authenticated?
+=&gt; true
+@user_profile.contacts 
+=&gt; [{:name=&gt;&quot;John Test&quot;,
+  :email_id=&gt;&quot;&quot;,
+  :phone_number=&gt;&quot;&quot;,
+  :id=&gt;&quot;1&quot;,
+  :profile_url=&gt;nil,
+  :image_url=&gt;nil,
+  :status=&gt;nil,
+  :industry=&gt;nil,
+  :country=&gt;nil,
+  :gender=&gt;nil},
+  ...
+</code></pre>
+
+<p>When unauthenticated, a method like contacts will return false.</p>
+
+<pre class="code ruby"><code class="ruby">@user_profile.authenticated?
+=&gt; false
+@user_profile.contacts
+=&gt; false
+</code></pre>
+
+<p>However, if you want to be a bit more flammable, try using contacts!, the bang version. It still returns
+the same results when authed, but when unauthed, will actually raise a LoginRadius::Exception.</p>
+
+<h3>The LoginRadius::UserProfile object before and after login</h3>
+
+<p>Once you&#39;ve got a valid user_profile, you have many methods available to you. Let&#39;s quickly take a look 
+at the methods in a LoginRadius::UserProfile object that hasn&#39;t yet been authenticated:</p>
+
+<pre class="code ruby"><code class="ruby">@user_profile.authenticated?
+=&gt; false
+
+@user_profile.methods - Object.new.methods
+=&gt; [:secret,
+ :secret=,
+ :token,
+ :token=,
+ :async,
+ :async=,
+ :guid_valid?,
+ :authenticated?,
+ :call_api,
+ :send_twitter_message,
+ :send_linkedin_message,
+ :make_facebook_post,
+ :login!,
+ :login,
+ :twitter_mentions!,
+ :twitter_mentions,
+ :twitter_timeline!,
+ :twitter_timeline,
+ :linked_in_companies!,
+ :linked_in_companies,
+ :contacts!,
+ :contacts,
+ :facebook_groups!,
+ :facebook_groups,
+ :facebook_posts!,
+ :facebook_posts,
+ :facebook_events!,
+ :facebook_events]
+</code></pre>
+
+<p>Notice we&#39;ve got a lot of stuff we can access. But we&#39;re not yet authenticated. Running login and then checking
+the new methods created, we see we have much more than before!</p>
+
+<pre class="code ruby"><code class="ruby">@user_profile.login
+=&gt; true
+@user_profile.authenticated?
+=&gt; true
+@user_profile.methods - Object.new.methods
+=&gt; [:id,
+:provider,
+:prefix,
+:first_name,
+:middle_name,
+:last_name,
+:suffix,
+:full_name,
+:nick_name,
+:profile_name,
+:birth_date,
+:gender,
+:website,
+:email,
+:country,
+:thumbnail_image_url,
+:image_url,
+:favicon,
+:profile_url,
+:home_town,
+:state,
+:city,
+:industry,
+:about,
+:time_zone,
+:local_language,
+:language,
+:verified,
+:updated_time,
+:positions,
+:educations,
+:phone_numbers,
+:im_accounts,
+:addresses,
+:main_address,
+:created,
+:local_city,
+:profile_city,
+:local_country,
+:profile_country,
+:relationship_status,
+:quota,
+:interested_in,
+:interests,
+:religion,
+:political,
+:sports,
+:inspirational_people,
+:https_image_url,
+:followers_count,
+:friends_count,
+:is_geo_enabled,
+:total_statuses_count,
+:associations,
+:num_recommenders,
+:honors,
+:skills,
+:current_status,
+:certifications,
+:courses,
+:volunteer,
+:recommendations_received,
+:languages,
+:public_repository,
+:hireable,
+:repository_url,
+:age,
+:patents,
+:favorite_things,
+:professional_headline,
+:provider_access_credential,
+:secret,
+:secret=,
+:token,
+:token=,
+:async,
+:async=,
+:guid_valid?,
+:authenticated?,
+:call_api,
+:send_twitter_message,
+:send_linkedin_message,
+:make_facebook_post,
+:login!,
+:login,
+:twitter_mentions!,
+:twitter_mentions,
+:twitter_timeline!,
+:twitter_timeline,
+:linked_in_companies!,
+:linked_in_companies,
+:contacts!,
+:contacts,
+:facebook_groups!,
+:facebook_groups,
+:facebook_posts!,
+:facebook_posts,
+:facebook_events!,
+:facebook_events]
+</code></pre>
+
+<p>Holy moly we got a whole bunch of new methods! That&#39;s because on login, all the user profile information
+returned by the API is turned into dynamically generated GETTERs on the object that you can then use later.</p>
+
+<h3>Running the tests in test/unit</h3>
+
+<p>The base_test.rb file isn&#39;t meant to be run, it is inherited by user_profile_test.rb. In that file
+you&#39;ll notice the lines at the top of the file:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='const'>TOKEN</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>fef51928-517d-4c5c-8b94-4977c5a23ce1</span><span class='tstring_end'>&quot;</span></span>
+<span class='const'>SECRET</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>1337670d-f7fd-4066-a2e3-e440aec071ee</span><span class='tstring_end'>&quot;</span></span>
+</code></pre>
+
+<p>These are meant to be changed to your API secret and some user&#39;s token. What I do is I run a dummy
+rails app locally and use the forward gem so that it can receive requests from the internet. Then I setup
+a callback route and login page on the app and use it to have LoginRadius ping me with tokens that I can
+paste into this test file.</p>
+
+<p><em>Beware, LoginRadius invalidates any token after 15 minutes, so during testing, you&#39;ll have to repeat the token
+creation A LOT</em></p>
+
+<p>To run the tests, do:</p>
+
+<pre class="code ruby"><code class="ruby">bundle exec ruby -Itest test/unit/user_profile_test.rb
+</code></pre>
+
+<p>If you login with a facebook user, for instance, you&#39;ll notice all the twitter/linked in tests failing.
+This is to be expected, you don&#39;t have access to those streams!</p>
+
+<h3>Evented Frameworks</h3>
+
+<p>I&#39;ve built this gem to work with frameworks like Cramp. I&#39;ve done a little bit of testing by creating
+a basic event loop script in basic_async_test.rb in the test folder, which you can run to see that
+things work there.</p>
+
+<p>I&#39;ve also done some AB testing using a Cramp framework elsewhere, but you should take caution in using
+this gem in evented frameworks and make sure to use apache bench to test it for nonblocking yourself.</p>
+
+<h2>Contributing</h2>
+
+<ol>
+<li>Fork it</li>
+<li>Create your feature branch (<code>git checkout -b my-new-feature</code>)</li>
+<li>Commit your changes (<code>git commit -am &#39;Added some feature&#39;</code>)</li>
+<li>Push to the branch (<code>git push origin my-new-feature</code>)</li>
+<li>Create new Pull Request</li>
+</ol>
+</div></div>
+
+    <div id="footer">
+  Generated on Mon May 20 16:12:28 2013 by
+  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.8.6.1 (ruby-1.9.2).
+</div>
+
+  </body>
+</html>
