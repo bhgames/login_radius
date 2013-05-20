@@ -90,7 +90,7 @@ And, finally, you can also make facebook posts:
 Note that as of publishing, the :to option on facebook params does not work. You can't post to
 other people's walls.
 
-### LinkedIn Stuff
+#### LinkedIn Stuff
 
 To send messages over linked in:
 
@@ -104,7 +104,7 @@ Also, you can grab a user's linked in companies:
     @user_profile.linked_in_companies
     => [{:id=>314808, :name=>"Login Radius"}]
 		
-### Twitter Stuff
+#### Twitter Stuff
 
 To send messages over twitter:
 	
@@ -156,10 +156,10 @@ Note this is all the contacts from every social network the user is connected to
       :country=>nil,
       :gender=>nil}]
 
-### User Profile Stuff
+#### User Profile Stuff
 
 When you login, the API returns a hash of user profile information, which is then turned into methods
-on the LoginRadius::UserProfile object for your accessing pleasure. A quick call to 
+on the LoginRadius::UserProfile object for your accessing pleasure. A quick call to methods will show this. 
 
     @user_profile.methods
     =>[:id,
@@ -179,8 +179,8 @@ on the LoginRadius::UserProfile object for your accessing pleasure. A quick call
      :country,
      ...]
 
-Right after login will reveal these. For more information, please read the section in caveats on the
-matter, as it's a bit esoteric.
+Calling .methods on a user profile right after a successful login call will reveal these. 
+For more information, please read the section in caveats on the matter, as it's a bit esoteric.
 
 ## Caveats
 
