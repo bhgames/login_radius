@@ -5,7 +5,6 @@ gemspec
 
 
 group :test do
-  #gem 'pg'
   gem 'activerecord', "~> 3.2.12", :require => "active_record"
   gem 'activesupport'
   gem 'test-unit'

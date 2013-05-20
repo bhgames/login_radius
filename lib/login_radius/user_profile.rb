@@ -50,7 +50,7 @@ module LoginRadius
         #TODO: Test async!
         #if async is true, we expect you to be using EM::Synchrony submodule and to be in an eventloop,
         #like with a thin server using the Cramp framework. Otherwise, this method blows up.
-        response = EM::Synchrony.sync EventMachine::HttpRequest.new(url).aget :query => params
+        response = EM::Synchrony.sync EventMachine::HttpRequest.new(url).aget :redirects => 2, :query => params
         response = response.body        
       else
         #synchronous version of the call.
@@ -61,7 +61,7 @@ module LoginRadius
         http.use_ssl = true
         http.verify_mode = OpenSSL::SSL::VERIFY_NONE
         response = http.get(url_obj.request_uri)
-        pp API_ROOT + url_obj.request_uri
+        
         if response.is_a?(Net::HTTPTemporaryRedirect)
           #for some reason, we always get redirected when calling server first time.
           #so if we do, we scan body for the redirect url, and the scan returns
@@ -72,6 +72,11 @@ module LoginRadius
           return call_api(redirect_url, params) 
         end
       end
+      
+      # For some reason, this API returns true/false instead of JSON responses for certain calls.
+      # We catch this here.
+      return true if response.body.match(/^true/i)
+      return false if response.body.match(/^false/i)
       
       unconverted_response = JSON.parse(response.body)
       #it's all String keys in CamelCase above, so...

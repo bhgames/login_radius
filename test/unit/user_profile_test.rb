@@ -1,6 +1,6 @@
 require_relative 'base_test.rb'
 class UserProfileTest < BaseTest
-  TOKEN = "90986ecd-3ee9-4c81-9dec-eb1673fc3cb0"
+  TOKEN = "fef51928-517d-4c5c-8b94-4977c5a23ce1"
   SECRET = "1337670d-f7fd-4066-a2e3-e440aec071ee"
   
   def setup
@@ -13,6 +13,7 @@ class UserProfileTest < BaseTest
   end
   
   test "basic user profile login sync" do
+    binding.pry
     assert_not_nil(@user_profile.id)
     assert_not_nil(@user_profile.provider)
     assert(@user_profile.authenticated?)
@@ -45,4 +46,24 @@ class UserProfileTest < BaseTest
   test "events" do    
     assert(@user_profile.facebook_events.is_a?(Array))
   end
+  
+  test "fb post" do
+    params = {
+      :title => "Testing",
+      :url => "www.loginradius.com",
+      :status => "Wizzup",
+      :caption => "Testly",
+      :description => "Testing"
+    }
+    assert(@user_profile.make_facebook_post(params))
+  end
+  
+  test "twitter message" do
+    assert(@user_profile.send_twitter_message(@user_profile.contacts.first[:id], "Testing", "This is a test."))
+  end
+  
+  test "linked in message" do
+    assert(@user_profile.send_linked_in_message(@user_profile.contacts.first[:id], "Testing", "This is a test."))
+  end
+  
 end
