@@ -47,6 +47,7 @@ module LoginRadius
       #as would happen in a recursive redirect call.
       
       if async
+        #UNTESTED
         #if async is true, we expect you to be using EM::Synchrony submodule and to be in an eventloop,
         #like with a thin server using the Cramp framework. Otherwise, this method blows up.
         response = EM::Synchrony.sync EventMachine::HttpRequest.new(url).aget :redirects => 2, :query => params
