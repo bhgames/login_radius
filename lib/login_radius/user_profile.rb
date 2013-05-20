@@ -47,11 +47,10 @@ module LoginRadius
       #as would happen in a recursive redirect call.
       
       if async
-        #TODO: Test async!
         #if async is true, we expect you to be using EM::Synchrony submodule and to be in an eventloop,
         #like with a thin server using the Cramp framework. Otherwise, this method blows up.
         response = EM::Synchrony.sync EventMachine::HttpRequest.new(url).aget :redirects => 2, :query => params
-        response = response.body        
+        response = response.response        
       else
         #synchronous version of the call.
         url_obj = URI.parse(url)
@@ -71,22 +70,31 @@ module LoginRadius
           redirect_url = redirect_url_array.first
           return call_api(redirect_url, params) 
         end
+        
+        response = response.body
       end
       
       # For some reason, this API returns true/false instead of JSON responses for certain calls.
       # We catch this here.
-      return true if response.body.match(/^true/i)
-      return false if response.body.match(/^false/i)
+      return true if response.match(/^true/i)
+      return false if response.match(/^false/i)
       
-      unconverted_response = JSON.parse(response.body)
-      #it's all String keys in CamelCase above, so...
-      # IF we got a hash back, convert it directly, if its an array, convert each item which is a hash
-      # into snake case
-      converted_response = unconverted_response.is_a?(Hash) ?
-                            Hash.lr_convert_hash_keys(unconverted_response).symbolize_keys! : 
-                            unconverted_response.map { |item| Hash.lr_convert_hash_keys(item).symbolize_keys! }
+      #We rescue this because sometimes the API returns HTML pages(which can't be JSON parsed)
+      #This mostly happens when people use expired tokens. So we go ahead and raise an exception
+      #About it if it gets caught.
+      begin
+        unconverted_response = JSON.parse(response)
+        #it's all String keys in CamelCase above, so...
+        # IF we got a hash back, convert it directly, if its an array, convert each item which is a hash
+        # into snake case
+        converted_response = unconverted_response.is_a?(Hash) ?
+                              Hash.lr_convert_hash_keys(unconverted_response).symbolize_keys! : 
+                              unconverted_response.map { |item| Hash.lr_convert_hash_keys(item).symbolize_keys! }
       
-      return converted_response
+        return converted_response
+      rescue JSON::ParserError => e
+        raise LoginRadius::Exception.new("A JSON parsing error occured because the API returned an HTML page instead of JSON. This happens mostly when you're using an expired Token. Specifics: #{e.message}")
+      end 
     end
   end
 end

@@ -1,6 +1,6 @@
 require_relative 'base_test.rb'
 class UserProfileTest < BaseTest
-  TOKEN = "fef51928-517d-4c5c-8b94-4977c5a23ce1"
+  TOKEN = "6ce9e952-9a98-49d6-bf4b-7ab8107243fb"
   SECRET = "1337670d-f7fd-4066-a2e3-e440aec071ee"
   
   def setup

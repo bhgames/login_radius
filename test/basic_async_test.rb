@@ -21,5 +21,5 @@ EM.synchrony do
     :async => true
   })
   @user_profile.login
-  puts @user_profile.contacts
+  puts @user_profile.contacts!
 end
