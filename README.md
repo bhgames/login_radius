@@ -1,10 +1,23 @@
-
 # LoginRadius
 
 Ruby wrapper for the LoginRadius API. Get social graph information and send messages using LoginRadius'
 many social network clients!
 
 Optional Asynchronous EventMachine friendly option!
+
+## Installation
+
+Add this line to your application's Gemfile:
+
+    gem 'login_radius'
+
+And then execute:
+
+    $ bundle
+
+Or install it yourself as:
+
+    $ gem install login_radius
 
 ## Usage
 
@@ -396,20 +409,6 @@ things work there.
 
 I've also done some AB testing using a Cramp framework elsewhere, but you should take caution in using
 this gem in evented frameworks and make sure to use apache bench to test it for nonblocking yourself.
-
-## Installation
-
-Add this line to your application's Gemfile:
-
-    gem 'login_radius'
-
-And then execute:
-
-    $ bundle
-
-Or install it yourself as:
-
-    $ gem install login_radius
 
 ## Contributing
 
