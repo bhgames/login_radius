@@ -13,7 +13,6 @@ class UserProfileTest < BaseTest
   end
   
   test "basic user profile login sync" do
-    binding.pry
     assert_not_nil(@user_profile.id)
     assert_not_nil(@user_profile.provider)
     assert(@user_profile.authenticated?)

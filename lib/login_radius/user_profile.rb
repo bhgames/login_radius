@@ -1,3 +1,4 @@
+require 'net/http'
 module LoginRadius
   class UserProfile
     include UserProfileGetters
