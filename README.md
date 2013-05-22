@@ -47,7 +47,7 @@ Now you're ready to go with testing!
 
 When LoginRadius hits your callback after a user logs in, you'll see parameters like this:
 
-Parameters: {"token"=>"a0ba24d5-2290-43f8-a2f8-575848c9f0e8"}
+Parameters: {"token"=>"yourtokenhere"}
 
 This token is the token used in the above example. This is what you'll need to get your user's profile.
 Just paste it into the code above, and you can immediately grab their user profile on the callback,
@@ -66,24 +66,24 @@ Will return false, indicating you don't have access to that stream.
 #### Facebook Stuff
 
     @user_profile.facebook_groups
-    => [{:id=>"150473181768667", :name=>"Blood Eagles"},
-     {:id=>"2200024005", :name=>"Alpha Tau Omega: Delta Chapter"},
-     {:id=>"362409953784029", :name=>"Hickory Point EMT-B Class"},
-     {:id=>"281691781904237", :name=>"MCB 251 lab practical study guide"},
-     {:id=>"148034208622530", :name=>"FAMILY"},
-     {:id=>"204761486233741", :name=>"GlamourEarrings.com"},
-     {:id=>"206494779373909", :name=>"JUDO FAMILY!!!"},
-     {:id=>"115112148542081", :name=>"BattleHard Games, LLC"},
-     {:id=>"22918670824", :name=>"152 Thursday Meeting Group"}]
+    => [{:id=>"11111", :name=>"Name"},
+     {:id=>"11111", :name=>"Name"},
+     {:id=>"11111", :name=>"Name"},
+     {:id=>"11111", :name=>"Name"},
+     {:id=>"11111", :name=>"Name"},
+     {:id=>"11111", :name=>"Name"},
+     {:id=>"11111", :name=>"Name"},
+     {:id=>"11111", :name=>"Name"},
+     {:id=>"11111", :name=>"Name"}]
     
     @user_profile.facebook_groups
-    => [{:id=>"150473181768667", :name=>"Blood Eagles"},
-     {:id=>"2200024005", :name=>"Alpha Tau Omega: Delta Chapter"}]
+    => [{:id=>"11111", :name=>"Name"},
+     {:id=>"11111", :name=>"Name"}]
     
     
     @user_profile.facebook_events
-    => [{:id=>"328804572620",
-      :name=>"The Only Pi Day of Our Lives",
+    => [{:id=>"11111",
+      :name=>"Name",
       :start_time=>"3/14/2015 9:00:00 AM",
       :rsvp_status=>"attending",
       :location=>"Across the world!"}]
@@ -115,7 +115,7 @@ Notice how I grabbed my first contact and used his :id property.
 Also, you can grab a user's linked in companies:
 
     @user_profile.linked_in_companies
-    => [{:id=>314808, :name=>"Login Radius"}]
+    => [{:id=>11111, :name=>"Name"}]
 		
 #### Twitter Stuff
 
@@ -129,9 +129,8 @@ Notice how I grabbed my first contact and used his :id property.
 Grab your timelines and mentions:
 
     @user_profile.twitter_timeline
-    => [{:id=>"336525189544304640",
-        :text=>
-        "Samsung UE32F5000 – Televisor LED de 32 pulgadas con SmartTV (Full HD 1080p, Clear Motion Rate 100 Hz) color n... http://
+    => [{:id=>"11111",
+        :text=>"Stuff",
         :date_time=>"5/20/2013 4:53:52 PM",
         :likes=>0,
         :place=>"",
@@ -139,29 +138,28 @@ Grab your timelines and mentions:
          "<a href=\"http://twitterfeed.com\" rel=\"nofollow\">twitterfeed</a>",
         :image_url=>nil,
         :link_url=>nil,
-        :name=>"Computer Deals"}]
+        :name=>"Name"}]
         
     @user_profile.twitter_mentions
-    => [{:id=>"318451170697965568",
-        :text=>
-         "S/O to @Succes_Inside\n@NLWebMedia\nder Magazine\n@tendermagazine\n@sirtiman\n@JordanMPrince\n@frostfire\n@NikiAtHomeRich
+    => [{:id=>"11111",
+        :text=>"Stuff",
         :date_time=>"3/31/2013 7:54:10 PM",
         :likes=>0,
         :place=>"",
         :source=>"web",
         :image_url=>nil,
         :link_url=>nil,
-        :name=>"SheDoGraphics"}]
+        :name=>"Name"}]
 		
 #### Social Network Contacts
 
 Note this is all the contacts from every social network the user is connected to.
 
     @user_profile.contacts
-    => [{:name=>"John Test",
+    => [{:name=>"Name",
       :email_id=>"",
       :phone_number=>"",
-      :id=>"1",
+      :id=>"11111",
       :profile_url=>nil,
       :image_url=>nil,
       :status=>nil,
@@ -207,10 +205,10 @@ When authenticated, a method like contacts will return
     @user_profile.authenticated?
     => true
     @user_profile.contacts 
-    => [{:name=>"John Test",
+    => [{:name=>"Name",
       :email_id=>"",
       :phone_number=>"",
-      :id=>"1",
+      :id=>"11111",
       :profile_url=>nil,
       :image_url=>nil,
       :status=>nil,
@@ -383,8 +381,8 @@ returned by the API is turned into dynamically generated GETTERs on the object t
 The base_test.rb file isn't meant to be run, it is inherited by user_profile_test.rb. In that file
 you'll notice the lines at the top of the file:
 
-    TOKEN = "fef51928-517d-4c5c-8b94-4977c5a23ce1"
-    SECRET = "1337670d-f7fd-4066-a2e3-e440aec071ee"
+    TOKEN = "yourtokenhere"
+    SECRET = "yoursecrethere"
 
 These are meant to be changed to your API secret and some user's token. What I do is I run a dummy
 rails app locally and use the forward gem so that it can receive requests from the internet. Then I setup
